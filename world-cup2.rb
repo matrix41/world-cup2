@@ -70,11 +70,11 @@ class AllMatchesPlayed
 
 		end # end of EACH-DO loop |games| 
 
-		puts "Location    Match #\n"
-		puts "--------    ----------------------------------\n"
+		puts "Location             Match #\n"
+		puts "--------             ----------------------------------\n"
 
 		location_of_matches.each do |stadium|
-			puts stadium # what happens when you print this??
+			puts "#{stadium[0]} - Matches: #{stadium[1]}"
 		end # end of EACH-DO loop |stadium|
 
 	end # end group_matches_by_location function 
@@ -105,9 +105,9 @@ end # end AllMatchesPlayed class
 favorite_team = AllMatchesPlayed.new
 
 # Step 2 of 2 (Super Extra Bonus): Call function in Class AllMatchesPlayed
-favorite_team.print_matches()
+# favorite_team.print_matches()
 
-# favorite_team.group_matches_by_location()
+favorite_team.group_matches_by_location()
 
 # favorite_team.team_wins()
 
