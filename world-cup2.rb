@@ -47,13 +47,13 @@ class AllMatchesPlayed
 	def group_matches_by_location
 		response = HTTParty.get('http://worldcup.sfg.io/matches')
 
-		charliehorse = response.parsed_response
+		charleyhorse = response.parsed_response
 #		puts charliehorse.first['home_team']['country']
 
 		location_of_matches = {}
 
 # This EACH-DO loop will iterate through all the matches? 
-		charliehorse.each do |games|
+		charleyhorse.each do |games|
 # This IF-block checks to see if the location is already in the 
 # location_of_match hash.  If the location already exists as a 
 # key in the hash, then shovel a match number into the array it 
@@ -81,22 +81,77 @@ class AllMatchesPlayed
 
 
 
-	def team_wins
-# Makes sure you list of teams do not include 'Draw'
-# 
+	def team_winners
 		response = HTTParty.get('http://worldcup.sfg.io/matches')
 
 		battlestar = response.parsed_response
 
-		location_of_matches = {}
+		match_winners = {}
 
 # This EACH-DO loop will iterate through all the matches? 
 		battlestar.each do |games|
+			game_winner = games['winner']
+			game_status = games['status']
 
-		end 
+			if game_status.include?("completed")
+#				puts games['winner']
+				if match_winners.has_key? ( game_winner )
+					match_winners[ game_winner ] += 1 # increment by 1 if an existing key
+				else
+					match_winners[ game_winner ] = 1 # initialize with value 1 if new key
+				end # end of inner IF-block 
+			end # end of outer IF-block 
+		end # end of EACH-DO loop |games| 
 
+# Prints a list of winners and the number of wins (excludes Draw results) 
+		match_winners.each do |thewinners|
+			puts "#{thewinners[0]} ==> #{thewinners[1]}" if !thewinners.include?("Draw")
+		end # end of EACH-DO loop |thewinners|
 	end # end of team_wins function
 
+
+	def team_losers
+		response = HTTParty.get('http://worldcup.sfg.io/matches')
+
+		coffee = response.parsed_response
+
+		all_teams = {}
+
+# This EACH-DO loop will iterate through all the matches? 
+		coffee.each do |games|
+			game_home_team = games['home_team']['country']
+#			puts game_home_team
+			game_away_team = games['away_team']['country']
+			game_winner = games['winner']
+			game_status = games['status']
+
+			if game_status.include?("completed")
+				if !all_teams.has_key?( game_home_team )
+					all_teams[ game_home_team ] = 0 # initialize team win to 0 
+				end # end of inner IF-block 
+			end # end of outer IF-block 
+
+			if game_status.include?("completed")
+				if !all_teams.has_key?( game_away_team )
+					all_teams[ game_away_team ] = 0 # initialize team win to 0 
+				end # end of inner IF-block 
+			end # end of outer IF-block 
+
+			if game_status.include?("completed")
+				if all_teams.has_key? ( game_winner )
+					all_teams[ game_winner ] += 1 # increment by 1 if an existing key
+				end # end of inner IF-block 
+			end # end of outer IF-block 
+
+		end # end of EACH-DO loop |games|
+
+# Prints a list of the losers 
+		all_teams.each do |thelosers|
+			if ( thelosers[1] < 1 )
+				puts "#{thelosers[0]} ==> #{thelosers[1]}"
+			end
+		end # end of EACH-DO loop |thewinners|
+	end # end of team_losers function 
 
 end # end AllMatchesPlayed class
 
@@ -107,8 +162,12 @@ favorite_team = AllMatchesPlayed.new
 # Step 2 of 2 (Super Extra Bonus): Call function in Class AllMatchesPlayed
 # favorite_team.print_matches()
 
+puts "\nThis is a list of all the match locations and the matches played there: "
 favorite_team.group_matches_by_location()
 
-# favorite_team.team_wins()
+puts "\nThis is a list of all the winning teams: "
+favorite_team.team_winners()
 
+puts "\nThis is a list of all the losing teams: "
+favorite_team.team_losers()
 
