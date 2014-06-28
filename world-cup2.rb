@@ -16,14 +16,25 @@ class AllMatchesPlayed
 # contain any information as the game has not been played yet.  
 			if ( ( games['home_team'].class.to_s() =~ /^Hash$/ ) && 
 				 ( games['away_team'].class.to_s() =~ /^Hash$/ ) )
-				puts "Match #{games['match_number']}:  #{games['home_team']['country']}  #{games['away_team']['country']}"
+				puts "\nMatch #{games['match_number']}:  #{games['home_team']['country']}  #{games['away_team']['country']}"
 #				if ( !games['winner'].nil? )
-				puts games['winner']
+#				puts games['winner']
 				game_winner = games['winner']
-				if !game_winner.include?( "Draw" )
+				game_status = games['status']
+				# if ( !games['winner'].nil? )
+				# 	puts game_winner
+				# else
+				# 	puts "Draw"
+				# end
+
+				if game_status.include?("completed")
+				  if game_winner.include?( "Draw" )
+				  	puts "Draw"
+				  else
 					puts "Winner: #{game_winner}"
+				  end
 				else
-					puts "Draw"
+					puts "Not Played"
 				end
 			else
 				puts "Not Played"
