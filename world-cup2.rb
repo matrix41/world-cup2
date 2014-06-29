@@ -119,24 +119,30 @@ class AllMatchesPlayed
 
 # This EACH-DO loop will iterate through all the matches? 
 		coffee.each do |games|
+
 			game_home_team = games['home_team']['country']
-#			puts game_home_team
 			game_away_team = games['away_team']['country']
 			game_winner = games['winner']
 			game_status = games['status']
 
+# This nested IF block will look for completed games and then populate the 
+# hash all_teams with the home team countries 
 			if game_status.include?("completed")
 				if !all_teams.has_key?( game_home_team )
 					all_teams[ game_home_team ] = 0 # initialize team win to 0 
 				end # end of inner IF-block 
 			end # end of outer IF-block 
 
+# This nested IF block will look for completed games and then populate the 
+# hash all_teams with the away team countries 
 			if game_status.include?("completed")
 				if !all_teams.has_key?( game_away_team )
 					all_teams[ game_away_team ] = 0 # initialize team win to 0 
 				end # end of inner IF-block 
 			end # end of outer IF-block 
 
+# This nested IF block will look for completed games and then increment by 1 the 
+# value associated with keys in hash all_teams when a team has won a game 
 			if game_status.include?("completed")
 				if all_teams.has_key? ( game_winner )
 					all_teams[ game_winner ] += 1 # increment by 1 if an existing key
@@ -145,7 +151,7 @@ class AllMatchesPlayed
 
 		end # end of EACH-DO loop |games|
 
-# Prints a list of the losers 
+# Prints a list of all the loser teams that did not win one single game 
 		all_teams.each do |thelosers|
 			if ( thelosers[1] < 1 )
 				puts "#{thelosers[0]} ==> #{thelosers[1]}"
@@ -159,8 +165,9 @@ end # end AllMatchesPlayed class
 # Step 1 of 2 (Super Extra Bonus): Instantiate new object
 favorite_team = AllMatchesPlayed.new
 
-# Step 2 of 2 (Super Extra Bonus): Call function in Class AllMatchesPlayed
-# favorite_team.print_matches()
+puts "\nThis prints the match number, the home team, and the away team."
+puts "\nThis also prints the winner of the match."
+favorite_team.print_matches()
 
 puts "\nThis is a list of all the match locations and the matches played there: "
 favorite_team.group_matches_by_location()
