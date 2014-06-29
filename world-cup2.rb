@@ -6,8 +6,8 @@ class AllMatchesPlayed
 
 		rabbit = response.parsed_response
 
-		puts "Match #    Home Team     Away Team\n"
-		puts "-------    ---------     ---------\n"
+		puts "Match #    Home Team     Away Team     Date/Time\n"
+		puts "-------    ---------     ---------     ---------\n"
 #		puts rabbit.first['home_team']['country']
 		rabbit.each do |games|
 # This IF-block checks whether the home_team field is hash or not.  
@@ -16,7 +16,14 @@ class AllMatchesPlayed
 # contain any information as the game has not been played yet.  
 			if ( ( games['home_team'].class.to_s() =~ /^Hash$/ ) && 
 				 ( games['away_team'].class.to_s() =~ /^Hash$/ ) )
-				puts "\nMatch #{games['match_number']}:  #{games['home_team']['country']}  #{games['away_team']['country']}"
+				print "\nMatch #{games['match_number']}:  "
+				print "#{games['home_team']['country']}   "
+				print "#{games['away_team']['country']}   " 
+				0.upto(9) {|i| print "#{games['datetime'][i]}"}
+				print " "
+				11.upto(18) {|i| print "#{games['datetime'][i]}"}
+				print " (localtime)"
+				puts " "
 #				if ( !games['winner'].nil? )
 #				puts games['winner']
 				game_winner = games['winner']
@@ -71,7 +78,7 @@ class AllMatchesPlayed
 		end # end of EACH-DO loop |games| 
 
 		puts "Location             Match #\n"
-		puts "--------             ----------------------------------\n"
+		puts "------------------   ----------------------------------\n"
 
 		location_of_matches.each do |stadium|
 			puts "#{stadium[0]} - Matches: #{stadium[1]}"
@@ -166,7 +173,7 @@ end # end AllMatchesPlayed class
 favorite_team = AllMatchesPlayed.new
 
 puts "\nThis prints the match number, the home team, and the away team."
-puts "\nThis also prints the winner of the match."
+puts "This also prints the winner of the match."
 favorite_team.print_matches()
 
 puts "\nThis is a list of all the match locations and the matches played there: "
